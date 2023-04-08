@@ -38,7 +38,6 @@ def Read_db():
             temp_note[temp[0]] = val
             notes.append(temp_note)
         file.close()
-    print(notes)
     return notes
 
 
@@ -51,16 +50,16 @@ def Print_note(note):
         if len(val) > 3:
             result.append(val[3])
     if len(result) == 0:
-        print("\nЗаписи с таким номер не существует")
+        print("\nЗаметки с таким номер не существует")
     else:
-        print(f"\nЗапись №{keys}\nНазвание:{result[0]}\nТекст заметки:{result[1]}\nДата создания:{result[2]}")
+        print(f"\nЗаметка №{keys}\nНазвание:{result[0]}\nТекст:{result[1]}\nДата создания:{result[2]}")
     if len(note.values()) == 4:
         print(f"Дата последнего изменения: {result[3]}")
 
 
 def Find():
     action = input(
-        "Выберете метод поиска:\n1 - по номеру:\n2 - по названию:\n3 - по содержимому заметки:"
+        "Выберете метод поиска:\n1 - по номеру:\n2 - по названию:\n3 - по содержимому:"
         "\n4 - по дате:\n5 - выход в главное меню:\n6 - Выход из программы\nВведите цифру действия --> ")
     while (int(action) < 1 or int(action) > 6):
         action = input("ВЫБРАН НЕ ВЕРНЫЙ ПУНКТ !!!\nВведите верный пункт меню ")
@@ -87,7 +86,7 @@ def Find():
                     if action in val[1]:
                         Print_note(item)
         case '4':
-            action = input("Введите число, либо месяц, либо год создания заметки -->")
+            action = input("Введите число, месяц или год создания заметки -->")
             db = Read_db()
             for item in db:
                 for key, val in item.items():
@@ -99,6 +98,25 @@ def Find():
             exit()
 
 
+def Show_all():
+    db = Read_db()
+    for item in db:
+        result = []
+        for keys, val in item.items():
+            result.append(val[0])
+            result.append(val[1])
+            result.append(val[2])
+            if len(val) > 3:
+                result.append(val[3])
+            if len(result) == 0:
+                print("Заметок нет")
+            else:
+                print(f"\nЗаметка №{keys}\nНазвание:{result[0]}\nТекст:{result[1]}\nДата создания:{result[2]}")
+            if len(item.values()) == 4:
+                print(f"Дата последнего изменения:{result[3]}")
+
+
 # Create_note()
 # Read_db()
 # Find()
+Show_all()
