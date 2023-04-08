@@ -116,7 +116,73 @@ def Show_all():
                 print(f"Дата последнего изменения:{result[3]}")
 
 
+def Edit_note():
+    numb = input("\nВведите номер заметки, которую необходимо отредактировать:\n--> ")
+    db = Read_db()
+    edit = {}
+    for item in db:
+        for key, val in item.items():
+            if numb == key:
+                edit = item
+    for i in range(len(db) - 1):
+        for key, val in db[i].items():
+            if numb == key:
+                db.remove(db[i])
+    action = input(
+        "\nВыберете пункт редактирования:\n1 - редактировть название заметки:\n2 - редактировть текст заметки:\nВведите пункт --> ")
+    while (int(action) < 1 or int(action) > 2):
+        action = input("ВЫБРАН НЕ ВЕРНЫЙ ПУНКТ !!!\nВведите верный пункт меню ")
+    today = datetime.datetime.today()
+    today = today.strftime("%m/%d/%Y")
+    Print_note(edit)
+    match action:
+        case '1':
+            result = []
+            for keys, val in edit.items():
+                result.append(val[1])
+                result.append(val[2])
+            action = input("\nВведите новое название заметки --> ")
+            new_note = {}
+            new_note[numb] = [action, result[0], result[1], today]
+            db.append(new_note)
+            with open("notes.csv", "w", encoding='utf-8') as file:
+                for i in range(len(db)):
+                    item = str(db[i]).replace("{", "").replace("}", "").replace("'", "").replace(":", ",") \
+                        .replace("[", "").replace("]", "").replace(",", ";")
+                    if i == (len(db) - 1):
+                        file.write(f'{item}\n')
+                    else:
+                        file.write(f'{item}\n')
+                file.close()
+            print("Запись сохранена")
+        case '2':
+            result = []
+            for keys, val in edit.items():
+                result.append(val[0])
+                result.append(val[2])
+            action = input("\nВведите новый текст заметки --> ")
+            new_note = {}
+            new_note[numb] = [result[0], action, result[1], today]
+            db.append(new_note)
+            with open("notes.csv", "w", encoding='utf-8') as file:
+                for i in range(len(db)):
+                    item = str(db[i]).replace("{", "").replace("}", "").replace("'", "").replace(":", ",") \
+                        .replace("[", "").replace("]", "").replace(",", ";")
+                    if i == (len(db) - 1):
+                        file.write(f'{item}\n')
+                    else:
+                        file.write(f'{item}\n')
+                file.close()
+            print("Запись сохранена\n")
+            action = input("Введите новый текст -->")
+            db = Read_db()
+            for item in db:
+                for key, val in item.items():
+                    if action in val[0]:
+                        Print_note(item)
+
 # Create_note()
 # Read_db()
 # Find()
-Show_all()
+# Show_all()
+Edit_note()
